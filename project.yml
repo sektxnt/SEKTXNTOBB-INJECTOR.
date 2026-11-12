@@ -13,16 +13,17 @@ targets:
     sources:
       - path: ContentView.swift
       - path: SEKTXNTOBBInjectorApp.swift
-
-    resources:
       - path: game_patch_4.7.0.21760.pak
+        buildPhase: resources
 
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sektxntobb.injector
-        PRODUCT_NAME: SEKTXNTOBB INJECTOR
-        INFOPLIST_KEY_CFBundleDisplayName: SEKTXNTOBB INJECTOR
+        PRODUCT_NAME: "SEKTXNTOBB INJECTOR"
+        INFOPLIST_KEY_CFBundleDisplayName: "SEKTXNTOBB INJECTOR"
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
         CODE_SIGNING_ALLOWED: NO
