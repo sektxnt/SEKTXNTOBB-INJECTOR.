@@ -1,38 +1,43 @@
 name: Build unsigned iOS IPA
 
 on:
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: macos-15
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+  build:
+    runs-on: macos-15
 
-  - name: Install XcodeGen
-    run: brew install xcodegen
-  - name: Generate Xcode project
-    run: xcodegen generate
-  - name: Build app
-    run: |
-      xcodebuild \
-        -project SEKTXNTOBBInjector.xcodeproj \
-        -scheme SEKTXNTOBBInjector \
-        -configuration Release \
-        -sdk iphoneos \
-        -derivedDataPath build \
-        CODE_SIGNING_ALLOWED=NO
-  - name: Package unsigned IPA
-    run: |
-      mkdir -p Payload
-      APP_PATH=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' -print -quit)
-      test -n "$APP_PATH"
-      cp -R "$APP_PATH" Payload/
-      zip -r SEKTXNTOBB-INJECTOR-unsigned.ipa Payload
-  - name: Upload IPA
-    uses: actions/upload-artifact@v4
-    with:
-      name: SEKTXNTOBB-INJECTOR-unsigned-ipa
-      path: SEKTXNTOBB-INJECTOR-unsigned.ipa
-      retention-days: 7
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build iOS app
+        run: |
+          xcodebuild \
+            -project SEKTXNTOBBInjector.xcodeproj \
+            -scheme SEKTXNTOBBInjector \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' -print -quit)
+          test -n "$APP_PATH"
+          cp -R "$APP_PATH" Payload/
+          zip -r SEKTXNTOBB-INJECTOR-unsigned.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SEKTXNTOBB-INJECTOR-unsigned-ipa
+          path: SEKTXNTOBB-INJECTOR-unsigned.ipa
+          retention-days: 7
